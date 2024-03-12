@@ -1,23 +1,36 @@
 #include <iostream>
-#include <set>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
 int main () {
-    set<long long int> numbers;
+    vector<long long int> numbers;
     int n;
     cin >> n;
-    long long int x;
+    long long int y;
     for (int i = 0; i < n; i ++) {
-        cin >> x;
-        if (numbers.count(x))
-            numbers.insert(x*2);
-        else
-            numbers.insert(x);
+        cin >> y;
+        numbers.push_back(y);
     }
-    x = 0;
-    while (true) {
-        x += 1;
-        
+    sort(numbers.begin(), numbers.end());
+    auto firstElement = numbers.begin();
+    if (1 != *firstElement) {
+        cout << 1;
+        return 0;
     }
+    numbers.erase(firstElement);
+    long long int interval = 1;
+    long long int lastNum = 1;
+    for (auto x = numbers.begin(); x != numbers.end(); x++) {
+        if (lastNum + interval < *x) {
+            //cout << "Ended at: " << *x << "     lastNum: " << lastNum << "     interval: " << interval << "\n";
+            cout << lastNum + interval;
+            return 0;
+        }
+        interval += lastNum;
+        lastNum = *x;
+        //cout << "lastNum: " << lastNum << "     interval: " << interval << "\n";
+    }
+    cout << lastNum + interval;
 }
