@@ -6,55 +6,34 @@
 
 using namespace std;
 
-int rec(int a, int b) {
-    if ( a == b) return 0;
-    int best = 1000;
-    int ll = max(a, b);
-    int ss = min(a, b);
-    for (int i = 1; i <= ll; i++) {
-        int res = rec(ll - i, ss) + rec(i, ss) + 1;
-        if  (res < best) best = res;
-    }
-    return best;
-}
-
 int main () {
     int a, b, s, l;
     cin >> a >> b;
-    l = max(a, b);
-    s = min(a, b);
-    if (l == s) {
-        cout << 0;
-        return 0;
-    }
 
-    int p = 50;
-
-    vector<vector<int>> res(p, vector<int>(p, 0));
-
-    for (int i = 0; i < p; i++) {
-        res[i][0] = i;
-        res[0][i] = i;
-    }
+    vector<vector<int>> res(a + 1, vector<int>(b + 1, 1e9));
 
 
-    for (int i = 1; i < p; i++) {
-        for (int j = 1; j < p; j++) {
-            if ( i < j ) {
-                res[i][j] = res[i][j-i] + 1;
-            } else if (j < i) {
-                res[i][j] = res[i-j][j] + 1;
-            } 
+    for (int i = 1; i <= a; i++) {
+        for (int j = 1; j <= b; j++) {
+            if ( i == j ) res[i][j] = 0;
+            else {
+                for (int k = 1; k < i; k++) {
+                    res[i][j] = min(res[i-k][j] + res[k][j]+1, res[i][j]);
+                }
+                for (int k = 1; k < j; k++) {
+                    res[i][j] = min(res[i][j-k] + res[i][k] + 1, res[i][j]);
+                }
+            }
         }
     }
-    
+    /*
     for (auto it = res.begin(); it != res.end(); it++){
         for (auto jt = (*it).begin(); jt != (*it).end(); jt++){
             cout << setw(3) <<  *jt;
         }
         cout << "\n";
     }
-    
+    */
 
-    cout << rec(a, b);
+    cout << res[a][b];
 }
