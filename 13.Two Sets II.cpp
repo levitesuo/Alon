@@ -1,24 +1,29 @@
 #include <iostream>
 #include <cmath>
+#include <set>
 
 using namespace std;
 
 int main () {
-    long long n, bigN;
+    int n;
     cin >> n;
-    float c = (n * 0.5 * n + 0.5 * n)/2;
 
-    if ( round(c) == c) bigN = c;
-    else return bigN = c;
+    long long sum = n * (n + 1) / 2;
+    if (sum % 2 != 0) {
+        cout << 0;
+        return 0;
+    }
 
-    long long values[bigN + 1]{0};
+    long long t = sum / 2;
 
-    cout << bigN;
+    long long nums[t+1]{0};
 
-    values[1] = 1;
-    values[2] = 1;
-    for ( int i = 2; i < bigN; i++ ){
-        values[i] = values[i-1] + values[i-2];
-    } 
-    cout << values[bigN];
+    nums[0] = 1;
+
+    for (int i = 1; i <= n; i++){
+        for (int j = t; j >= i; j--){
+            nums[j] = (nums[j-i] + nums[j]) % 1000000007;
+        }
+    }
+    cout << (nums[t] * 500000004) % 1000000007;
 }
